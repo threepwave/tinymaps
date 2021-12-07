@@ -16,6 +16,8 @@ async function main() {
     let json = tokenURI.substr(29);
     let output = JSON.parse(Buffer.from(json, 'base64').toString());
     console.log(output)
+    console.log('palette: ')
+    console.log(output.attributes[2].value)
 }
 
 main()

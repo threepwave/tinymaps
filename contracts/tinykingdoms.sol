@@ -1,3 +1,6 @@
+/* @HACK Remove for launch */
+import "hardhat/console.sol";
+
 // SPDX-License-Identifier: MIT
 
 pragma solidity >=0.7.0 <0.9.0;
@@ -36,15 +39,13 @@ contract TinyKingdoms is ERC721Enumerable,ReentrancyGuard,Ownable {
 
     Counters.Counter private _tokenIdCounter;
     bool public saleIsActive = true; 
+
+    /* @HACK Remove for launch */
+    event Debug(string output);
     
     constructor() ERC721("Tiny Kingdoms", "TNY") Ownable() {
         _tokenIdCounter.increment();
     }
-       
-    function setPrice(uint256 newPrice) public onlyOwner {
-        mintPrice = newPrice;
-    }
-    
     
     string[] private nouns = [ 
         "Eagle","Meditation","Folklore","Star","Light","Play","Palace","Wildflower","Rescue","Fish","Painting",
@@ -110,33 +111,32 @@ contract TinyKingdoms is ERC721Enumerable,ReentrancyGuard,Ownable {
         ["#75974a", "#c83e3c", "#f39140", "#fcefdf"]
     ];
 
-    string [2][25] private flags = [
-
-        ['<rect class="cls-1" height="140" width="382" x="113" y="226" /><rect class="cls-2"  height="140" width="382" x="113" y="86" /><circle class="cls-3"  cx="304" cy="226" r="84"/>', "Rising Sun"], 
-        ['<rect class="cls-1" height="279" width="127" x="113" y="86" /><rect class="cls-2"  height="279" width="128" x="240" y="86" /><rect class="cls-3"  height="279" width="128" x="367" y="86" /><rect class="contour"  x="113.5" y="86.5" width="2" height="279"/>', "Vertical Triband"], 
-        ['<rect class="cls-1" height="279" width="382" x="113.65" y="86.26"/> <polygon class="cls-2"  points="113.65 86.27 304.65 225.76 113.65 365.26 113.65 86.27"/>', "Chevron"], 
-        ['<rect class="cls-1" height="279" width="381" x="113.77" y="86.13"/> <polygon class="cls-2"  points="112.77 178.87 208.27 178.87 208.27 86.13 302.77 86.13 302.77 178.87 494.49 178.87 494.49 272.24 302.77 272.24 303.83 365.13 208.29 365.63 208.27 272.24 112.89 272.24 112.77 178.87"/>', "Nordic Cross"], 
-        ['<rect class="cls-1" height="62"  width="381" x="114" y="86"/> <rect class="cls-2"  height="156" width="381" x="114" y="148"/> <rect class="cls-1"  height="62" width="381" x="114" y="304"/>', "Spanish Fess"], 
-        ['<rect class="cls-1" height="155" width="381" x="114" y="148"/> <rect class="cls-2"  height="62" width="381" x="114" y="86"/> <rect class="cls-2"  height="62" width="381" x="114" y="195"/> <rect class="cls-2"  height="62" width="381" x="114" y="303"/>', "Five Stripes"], 
-        ['<rect class="cls-1" height="279" width="382" x="113" y="87"/><circle  class="cls-2" cx="303.5" cy="224.5" r="95.5"/>', "Hinomaru"], 
-        ['<rect class="cls-1" height="279" width="190" x="114" y="86"/> <rect class="cls-2"  height="279" width="191" x="304" y="86"/>', "Vertical Bicolor"], 
-        ['<rect class="cls-1" height="279" width="381" x="114" y="86"/> <polygon class="cls-2"  points="165.74 86.5 113.85 86.5 113.85 125.1 252.77 225.84 113.85 326.58 113.85 364.9 165.47 364.9 304.79 263.56 445.19 365.38 495.45 365.38 495.45 325.6 358.44 226.25 495.45 126.09 495.45 87.59 444.92 87.59 304.79 188.12 165.74 86.5"/>', "Saltire"], 
-        ['<rect class="cls-1" height="140" width="382" x="114" y="225"/> <rect class="cls-2"  height="140" width="382" x="114" y="85"/>', "Horizontal Bicolor"], 
-        ['<rect class="cls-1" height="279" width="381" x="114" y="86"/> <rect class="cls-2"  height="279" width="128" x="177" y="86"/>',"Vertical Misplaced Bicolor"], 
-        ['<rect class="cls-1" height="279" width="381" x="114" y="85"/> <rect class="cls-2"  height="279" width="382" x="113" y="86"/> <rect class="cls-3"  height="155" width="256" x="176" y="148"/>', "Bordure"], 
-        ['<rect class="cls-1" height="279" width="382" x="112.75" y="86.62"/> <polyline class="cls-2"  points="113.07 365.29 391.75 365.62 112.85 226.33"/> <polyline class="cls-2"   points="113.07 85.96 391.75 85.62 112.85 226.58"/>', "Inverted Pall"], 
-        ['<rect class="cls-1" height="280" width="381" x="114" y="85"/> <rect class="cls-2"   height="68.63" width="63" x="113.83" y="86.69"/><rect class="cls-2"   height="68.63" width="63" x="240.83" y="86.69"/><rect class="cls-2"   height="68.63" width="63" x="367.83" y="86.69"/><rect class="cls-2"   height="68.63" width="63" x="113.83" y="226.19"/><rect class="cls-2"   height="68.63" width="63" x="240.83" y="226.19"/><rect class="cls-2"   height="68.63" width="63" x="367.83" y="226.19"/><rect class="cls-2"   height="68.63" width="63" x="176.83" y="156.44"/><rect class="cls-2"   height="68.63" width="63" x="303.83" y="156.44"/><rect class="cls-2"   height="68.63" width="63" x="430.83" y="156.44"/><rect class="cls-2"   height="68.63" width="63" x="176.83" y="297.07"/><rect class="cls-2"   height="68.63" width="63" x="303.83" y="297.07"/><rect class="cls-2"   height="68.63" width="63" x="430.83" y="297.07"/>', "Twenty-four squared"], 
-        ['<rect class="cls-1" height="278" width="383" x="112" y="87"/> <polygon class="cls-2"   points="113.1 85 289.69 85 494.1 365 318.1 365 113.1 85"/>', "Diagonal Bicolor"], 
-        ['<rect class="cls-1" height="93" width="381.13" x="113.65" y="86.25"/> <rect class="cls-2"  height="93" width="381.13" x="113.65" y="272.25"/> <rect class="cls-3"  height="93" width="382" x="112.77" y="179.25"/>', "Horizontal Triband"], 
-        ['<rect class="cls-1" height="278" width="382" x="113" y="87"/> <polygon class="cls-2"   points="494.66 86 318.06 86 113.66 365 289.66 364 494.66 86"/>', "Diagonal Bicolor Inverse"], 
-        ['<rect class="cls-1" height="279" width="381" x="114" y="86"/> <rect class="cls-2"   height="139" width="191" x="113" y="86"/><rect class="cls-2"   height="139" width="191" x="304" y="226"/>', "Quadrisection"], 
-        ['<polygon class="cls-1"  points="495.47 86.16 290.47 365 495.47 365 495.47 86.16"/> <polygon class="cls-2"  points="114.47 365.16 319.47 87.16 114.47 87.16 114.47 365.16"/> <polygon class="cls-3"  points="495.47 86.16 318.88 86.16 114.47 365.16 290.47 365 495.47 86.16"/>',"Diagonal Tricolor Inverse"], 
-        ['<rect class="cls-1"  height="279" width="190" x="304" y="87"/><rect class="cls-2"  height="279" width="190" x="114" y="86"/><path class="cls-1"  d="M304,310a84,84,0,0,1,0-168"/><path class="cls-2"  d="M304,142a84,84,0,0,1,0,168"/>', "Rising Split Sun"], 
-        ['<rect class="cls-2"  x="112.2" y="86.31" width="382" height="279"/> <path class="cls-3"  d="M184.37,121.45l7.84,15.88,17.52,2.55a1.52,1.52,0,0,1,.85,2.6L197.9,154.84l3,17.46a1.52,1.52,0,0,1-2.21,1.6L183,165.66l-15.68,8.24a1.52,1.52,0,0,1-2.21-1.6l3-17.46-12.68-12.36a1.52,1.52,0,0,1,.85-2.6l17.52-2.55,7.84-15.88A1.53,1.53,0,0,1,184.37,121.45Z"/>', "Lonely Star"],  
-        ['<polygon class="cls-1"  points="113.2 365 495 86 113.7 86 113.2 365" /> <polygon class="cls-2"  points="113.2 364.81 495 364.81 495 85.81 113.2 364.81" /><rect class="contour"  x="113.5" y="86.5" width="382" height="279" /><polygon id="shadow" class="shadow" points="112.5 365.5 112.5 87.92 108 97 108 370 490 370 494.67 365.5 112.5 365.5" />', "Diagonal Bicolor Right"], 
-        ['<rect class="cls-1"  x="113" y="227" width="382" height="140"/> <rect class="cls-2"  x="113" y="87" width="382" height="140"/> <path class="cls-3" d="M307.17,171.15l15.52,31.46,34.72,5a3,3,0,0,1,1.67,5.15L334,237.29l5.93,34.58a3,3,0,0,1-4.38,3.18l-31.05-16.32-31,16.32a3,3,0,0,1-4.38-3.18L275,237.29,249.84,212.8a3,3,0,0,1,1.67-5.15l34.72-5,15.52-31.46A3,3,0,0,1,307.17,171.15Z"/>', "Horizontal Bicolor with a star"], 
-        ['<rect class="cls-1"  x="113.3" y="85.81" width="381" height="279" /> <rect class="cls-2"  x="112.2" y="86.31" width="382" height="279" /> <path class="cls-3"  d="M304.17,174.15l15.52,31.46,34.72,5a3,3,0,0,1,1.67,5.15L331,240.29l5.93,34.58a3,3,0,0,1-4.38,3.18l-31.05-16.32-31,16.32a3,3,0,0,1-4.38-3.18L272,240.29,246.84,215.8a3,3,0,0,1,1.67-5.15l34.72-5,15.52-31.46A3,3,0,0,1,304.17,174.15Z"/>  <rect class="contour"  x="113.5" y="86.5" width="382" height="279" /> <polygon id="shadow"  class="shadow" points="112.5 365.5 112.5 87.92 108 97 108 370 490 370 494.67 365.5 112.5 365.5"/>' ,"Bonnie Star"],
-        ['<rect class="cls-1" x="113" y="86" width="382" height="279" /><path class="cls-2" d="M254.39,220.72c-12.06-26.86,6.15-59.35,37.05-57.18,35.54-4,73.17,11.34,57.82,52.45-4-41.61-10.06-3.76-5.07,11.77.36,3.53,3.81,2.36,6.28,3.09,7,3.35-4.56,9.81-6.68,13.37-3.19,1.4-7.43-.7-10.53,1.17-7.52,2.89-7.54,11.65-13.49,14.69-10,2-31,4.64-35.76-6.65,1-15.88-15.88-4.52-24-11-5.29-2.11-8.31-6.51-2.23-10.1,7.91-7.51-1.52-20.95,4.28-29.77,2.08-2.24-.15-6-3.11-5.13C252.15,202.65,256.43,214.06,254.39,220.72Zm23.93,17c9.31,1.15,17.39-5.16,17.29-14.21C294.2,192.84,246.71,231.75,278.32,237.73Zm31.41-15.43c.7,20,30.12,20.91,26.74-1.33C332.9,211.42,308.49,208,309.73,222.3ZM295.4,250c-.71,10.86,7.14-1.06,10.8,4.21C321.79,259.61,301,197.87,295.4,250Z"/> <path class="cls-2" d="M205.35,312.39c-2.6,0-4.58-3-3.6-4.91.59-1.16,1.36-2.22,2.05-3.33a4.24,4.24,0,0,0-.69-5.84,28.91,28.91,0,0,0-3.19-2.24c-1.51-1.05-3.09-2-4.51-3.17-1.68-1.37-1.86-4.68-.53-6.38a1.83,1.83,0,0,1,2.19-.54c2.33.65,4.64,1.44,7,1.87a31.84,31.84,0,0,0,6.25.42,5.39,5.39,0,0,0,2.74-1c4.17-2.82,8.29-5.71,12.4-8.61,5.24-3.72,10.47-7.44,15.67-11.21,2.76-2,5.45-4.12,8.14-6.23,3.25-2.57,6.78-1.75,10.29-.84,1.26.33,1.42,1.25.53,2.28a12.23,12.23,0,0,1-2,1.81c-9.38,6.82-18.64,13.83-28.21,20.37a50.14,50.14,0,0,0-13.41,13.44c-.65,1-1.44,1.86-2,2.85a38.27,38.27,0,0,0-2.16,4,14.57,14.57,0,0,1-4.89,6.31A14.2,14.2,0,0,1,205.35,312.39Z"/><path class="cls-2" d="M313.77,292.2c-18.18,2.17-38.88-2.2-38.81-24.88.65-2.67-1.22-14.79,3.62-9.12,1.73,24,24.92,15.23,42.09,15.47,8,.2,2.77-15.79,10.1-13.83C336.89,271.09,325.62,289.86,313.77,292.2Z"/><path class="cls-2" d="M188.66,158.18a8,8,0,0,1-5.57-2c-1.34-1.12-1.4-2.57.06-3.49A22.44,22.44,0,0,1,188,150.5c2.23-.74,4.59-1.27,5.95-3.38a9.8,9.8,0,0,0,1.15-3.2,15.58,15.58,0,0,0,0-2.56,4.38,4.38,0,0,1,3.41-4,2.54,2.54,0,0,1,3.26,1.61,43.05,43.05,0,0,1,1.73,4.81,12.93,12.93,0,0,0,6.26,7.93c5.2,3,10.48,6,15.55,9.19,4.55,2.9,9.19,5.61,14,8.12a94.18,94.18,0,0,1,9,5.84c1.66,1.14,1.84,2,.86,3.79a30.47,30.47,0,0,1-2.21,3.21,1.5,1.5,0,0,1-2.32.38c-2.26-1.54-4.55-3.05-6.83-4.58-.37-.25-.69-.57-1.07-.82-8.3-5.34-16.52-10.82-25-15.95-3.26-2-7-3.18-10.53-4.76a4.66,4.66,0,0,0-3.39-.08c-3,.9-6.12,1.68-9.18,2.51Z"/><path class="cls-2" d="M407.34,135.6c-.19.91-.35,1.83-.56,2.75-.55,2.37.1,3.45,2.39,4.36a15.53,15.53,0,0,1,3.86,2.1c2,1.55,2,5,.13,6.71l-.5.45c-4.1,3.53-4.11,3.57-9,1.41a6.54,6.54,0,0,0-6.27.29,103.21,103.21,0,0,0-15.93,10.55c-3.62,3-7.77,5.33-11.69,7.94-3.48,2.32-7,4.64-10.46,6.91-1.54,1-2,.89-2.85-.71-.7-1.39-1.24-2.88-1.84-4.32a2.23,2.23,0,0,1,.68-2.8,42.53,42.53,0,0,1,4-2.93c10.65-6.68,21.34-13.31,32-20a65.77,65.77,0,0,0,5.34-4.1,3.18,3.18,0,0,0,1.34-2.65c0-1.53.17-3,.18-4.58a6.59,6.59,0,0,1,2.68-5.2,2.68,2.68,0,0,1,3.48-.22C405.72,132.54,407.18,133.57,407.34,135.6Z"/><path class="cls-2" d="M344.09,258.87a37.13,37.13,0,0,1,5.42,1.38A84.26,84.26,0,0,1,368,271.45c1.72,1.33,3.74,2.26,5.6,3.42a42.57,42.57,0,0,1,3.78,2.57,69.52,69.52,0,0,0,13.29,8.18,28.56,28.56,0,0,0,10.55,2.51c4.3.31,8.61.53,12.91.84a9.09,9.09,0,0,1,2.22.53,2.72,2.72,0,0,1,2.12,2.89c-.05,1.75.1,3.51,0,5.25-.14,2.45-1.76,3.7-4.27,3.52-1.66-.13-3.32-.2-5-.27a3.32,3.32,0,0,0-3.34,2.07,23.4,23.4,0,0,0-1.45,4.3c-.41,1.88-1.95,2.67-3.47,1.47a8.45,8.45,0,0,1-1.86-2.42c-1-1.76-1.95-3.6-3-5.38a22.15,22.15,0,0,0-8.71-8.16c-3.76-2.18-7.24-4.84-10.92-7.17-3.1-2-6.47-3.56-9.44-5.7A173.89,173.89,0,0,0,344.66,266a1.35,1.35,0,0,1-.86-1.48C343.94,262.81,344,261.11,344.09,258.87Z"/>', "Jolly Roger"]
+    string [25] private flags = [
+        "Rising Sun",
+        "Vertical Triband", 
+        "Chevron", 
+        "Nordic Cross", 
+        "Spanish Fess", 
+        "Five Stripes", 
+        "Hinomaru", 
+        "Vertical Bicolor", 
+        "Saltire", 
+        "Horizontal Bicolor", 
+        "Vertical Misplaced Bicolor", 
+        "Bordure", 
+        "Inverted Pall", 
+        "Twenty-four squared", 
+        "Diagonal Bicolor", 
+        "Horizontal Triband", 
+        "Diagonal Bicolor Inverse", 
+        "Quadrisection", 
+        "Diagonal Tricolor Inverse", 
+        "Rising Split Sun", 
+        "Lonely Star",  
+        "Diagonal Bicolor Right", 
+        "Horizontal Bicolor with a star", 
+        "Bonnie Star",
+        "Jolly Roger"
     ];
 
 
@@ -189,18 +189,12 @@ contract TinyKingdoms is ERC721Enumerable,ReentrancyGuard,Ownable {
         return flagIndex;
     }
 
-    function getflagType(uint256 flagIndex) internal view returns (string memory) {       
-        string memory f1 = flags[flagIndex][0];
-        return string(abi.encodePacked(f1));
-    }
-
-
     function getflagName(uint256 flagIndex) internal view returns (string memory) {       
-        string memory f1 = flags[flagIndex][1];
+        string memory f1 = flags[flagIndex];
         return string(abi.encodePacked(f1));
     }
 
-     function getKingdom (uint256 tokenId, uint256 flagIndex) internal view returns (string memory) {
+    function getKingdom (uint256 tokenId, uint256 flagIndex) internal view returns (string memory) {
         uint256 rand = random(tokenId, "PLACE");
         
         
@@ -214,36 +208,9 @@ contract TinyKingdoms is ERC721Enumerable,ReentrancyGuard,Ownable {
             s1 = suffixes[(rand /11) % suffixes.length];
         }
         
-        string memory output= string(abi.encodePacked(a1,' ',n1,' ',s1));
-        bytes memory b =bytes(output);
-
-        uint256 y = 449;
-        uint256 i = 0;
-        uint256 e = 0;    
-        uint256 ll = 20;
-    
-        while (true) {
-        e = i + ll;
-        if (e >= b.length) {
-            e = b.length;
-        } else {
-            while (b[e] != ' ' && e > i) { e--; }
-        }
-
-      bytes memory line = new bytes(e-i);
-      for (uint k = i; k < e; k++) {
-        line[k-i] = _upper(b[k]);
-      }
-      
-      output = string(abi.encodePacked(output,'<text text-anchor="middle" class="place" x="303" y="',Strings.toString(y),'">',line,'</text>'));
-      if (y > 450) break;
-      
-      y += 38;
-      if (e >= b.length) break;
-      i = e + 1;
-    }
-
-    return output;
+        string memory output= string(abi.encodePacked(a1,' ',n1,' ',s1)); 
+        
+        return output;
 
     }
 
@@ -254,7 +221,6 @@ contract TinyKingdoms is ERC721Enumerable,ReentrancyGuard,Ownable {
         flag.themeIndex= getThemeIndex(tokenId);
         flag.orderIndex = getOrderIndex(tokenId);
         flag.flagIndex = getFlagIndex(tokenId);
-        flag.flagType= getflagType(flag.flagIndex);
         flag.flagName = getflagName(flag.flagIndex);
         flag.placeName= getKingdom(tokenId, flag.flagIndex);
 
@@ -277,21 +243,21 @@ contract TinyKingdoms is ERC721Enumerable,ReentrancyGuard,Ownable {
         string memory output = string(abi.encodePacked(parts[0],parts[1],parts[2],parts[3],parts[4],parts[5],parts[6],parts[7], parts[8]));
         return output;
     }
-    
-    function getFlagSVG(TinyFlag memory flag, string memory style) internal pure returns (string memory){
-        string[6] memory parts;
 
-        parts[0]=style;
-        parts[1]='<pattern id="backDots" width="64" height="64" patternUnits="userSpaceOnUse"><line fill="transparent" stroke="#565656" stroke-width="2" opacity=".6" x1="14.76" y1="24.94" x2="20.5" y2="19.5" /></pattern><filter id="back"><feTurbulence type="fractalNoise" baseFrequency="0.1" numOctaves="1" seed="42"/> <feDisplacementMap in="SourceGraphic" xChannelSelector="B" scale="200"/></filter><g filter="url(#back)"><rect x="-50%" y="-50%" width="200%" height="200%" fill="url(#backDots)" /></g><filter id="displacementFilter"><feTurbulence id="turbulenceMap" type="turbulence" baseFrequency="0.05" numOctaves="2" result= "turbulence"><animate attributeName="baseFrequency" values="0.01;0.001;0.01" dur="4s" repeatCount="indefinite"/></feTurbulence><feDisplacementMap in2="turbulence" in="SourceGraphic" scale="9" xChannelSelector="R" yChannelSelector="G" /></filter> <g id="layer_2" style="filter: url(#displacementFilter)">';
-        parts[2]=flag.flagType;
-        parts[3]='</g> <rect class="contour"  x="113.5" y="86.5" width="382" height="279" style="filter: url(#displacementFilter)"/><polygon class="shadow" points="112.5 365.5 112.5 87.92 108 97 108 370 490 370 494.67 365.5 112.5 365.5" style="filter: url(#displacementFilter)"/>';
-        parts[4]=flag.placeName;
-        parts[5]='</svg>';
-
-        string memory output = string(abi.encodePacked(parts[0],parts[1],parts[2],parts[3],parts[4],parts[5]));
+    function getPalette(TinyFlag memory flag) internal view returns (string memory) {
+        string[9] memory palette;
+        palette[0] = '["';
+        palette[1] = colors[flag.themeIndex][orders[flag.orderIndex][0]-1];
+        palette[2] = '", "';
+        palette[3] = colors[flag.themeIndex][orders[flag.orderIndex][1]-1];
+        palette[4] = '", "';
+        palette[5] = colors[flag.themeIndex][orders[flag.orderIndex][2]-1];
+        palette[6] = '", "';
+        palette[7] = colors[flag.themeIndex][3];
+        palette[8] = '"]';
+        string memory output = string(abi.encodePacked(palette[0], palette[1], palette[2], palette[3], palette[4], palette[5], palette[6], palette[7], palette[8]));
         return output;
     }
-
    
     function random(uint256 tokenId, string memory seed) internal pure returns (uint256) {
         return uint256(keccak256(abi.encodePacked(seed, Strings.toString(tokenId))));
@@ -308,17 +274,18 @@ contract TinyKingdoms is ERC721Enumerable,ReentrancyGuard,Ownable {
     function tokenURI(uint256 tokenId) override public view  returns (string memory) {
         TinyFlag memory flag = randomFlag(tokenId);
 
+        string memory palette = getPalette(flag);
+
         string memory json = Base64.encode(
             bytes(
                 string(abi.encodePacked(
                     '{"name": "Tiny Kingdom #',
                      Strings.toString(tokenId),
-                     '", "description": "Fully on-chain, randomly generated tiny flags.",',
-                     '"image": "data:image/svg+xml;base64,', 
-                     Base64.encode(bytes(getFlagSVG(flag, getFlagStyle(flag)))), 
-                     '"',
-                    ',"attributes":[{"trait_type":"Flag","value":"',flag.flagName,
-                    '"}]}'
+                     '", "description": "Fully on-chain, randomly generated tiny flags." ',
+                    ',"attributes":[ {"trait_type": "type", "value":"',flag.flagName,
+                    '"}, {"trait_type": "name", "value":"', flag.placeName, 
+                    '"}, {"trait_type": "palette", "value":', palette, 
+                    '}]}'
                     ))));
         
         json = string(abi.encodePacked('data:application/json;base64,', json));
