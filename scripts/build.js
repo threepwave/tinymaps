@@ -5,18 +5,16 @@ const ethers = hre.ethers;
 const price = 0.025;
 
 async function main() {
-    const TinyKingdoms = await ethers.getContractFactory("TinyKingdomsMetadata");
+    const TinyKingdoms = await ethers.getContractFactory("contracts/tinykingdomsmetadata.sol:TinyKingdomsMetadata");
     const kingdoms = await TinyKingdoms.deploy();
     await kingdoms.deployed();
-    
-    let flagname = await kingdoms.getFlagName(1);
-    console.log(flagname);
 
-    let kingdomname = await kingdoms.getKingdomName(1);
-    console.log(kingdomname);
+    const TinyMaps = await ethers.getContractFactory("TinyMaps");
+    const maps = await TinyMaps.deploy(kingdoms.address);
+    await maps.deployed();
     
-    let palette = await kingdoms.getPalette(1);
-    console.log(palette);
+    let name = await maps.getSVG(1);
+    console.log(name)
 }
 
 main()
