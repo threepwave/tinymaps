@@ -5,19 +5,18 @@ const ethers = hre.ethers;
 const price = 0.025;
 
 async function main() {
-    const TinyKingdoms = await ethers.getContractFactory("TinyKingdoms");
+    const TinyKingdoms = await ethers.getContractFactory("TinyKingdomsMetadata");
     const kingdoms = await TinyKingdoms.deploy();
     await kingdoms.deployed();
     
-    const ethToSend = ethers.utils.parseEther(price.toString());
+    let flagname = await kingdoms.getFlagName(1);
+    console.log(flagname);
 
-    await kingdoms.claim({value: ethToSend});
-    let tokenURI = await kingdoms.tokenURI(1);
-    let json = tokenURI.substr(29);
-    let output = JSON.parse(Buffer.from(json, 'base64').toString());
-    console.log(output)
-    console.log('palette: ')
-    console.log(output.attributes[2].value)
+    let kingdomname = await kingdoms.getKingdomName(1);
+    console.log(kingdomname);
+    
+    let palette = await kingdoms.getPalette(1);
+    console.log(palette);
 }
 
 main()
