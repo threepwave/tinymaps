@@ -53,27 +53,27 @@ contract TinyKingdomsMetadata {
 
       
     string[4][21] public colors = [            
-        ["#006D77", "#83C5BE", "#FFDDD2", "#faf2e5"],
-        ["#351F39", "#726A95", "#719FB0", "#f6f4ed"],
-        ["#472E2A", "#E78A46", "#FAC459", "#fcefdf"],
-        ["#0D1B2A", "#2F4865", "#7B88A7", "#fff8e7"],
-        ["#E95145", "#F8B917", "#FFB2A2", "#f0f0e8"],
+        ["#006D77", "#83C5BE", "#FFDDD2", "#FAF2E5"],
+        ["#351F39", "#726A95", "#719FB0", "#F6F4ED"],
+        ["#472E2A", "#E78A46", "#FAC459", "#FCEFDF"],
+        ["#0D1B2A", "#2F4865", "#7B88A7", "#FFF8E7"],
+        ["#E95145", "#F8B917", "#FFB2A2", "#F0F0E8"],
         ["#C54E84", "#F0BF36", "#3A67C2", "#F6F1EC"],
         ["#E66357", "#497FE3", "#8EA5FF", "#F1F0F0"],
         ["#ED7E62", "#F4B674", "#4D598B", "#F3EDED"],
         ["#D3EE9E", "#006838", "#96CF24", "#FBFBF8"],
-        ["#FFE8F5", "#8756D1", "#D8709C", "#faf2e5"],
-        ["#533549", "#F6B042", "#F9ED4E", "#f6f4ed"],
-        ["#8175A3", "#A3759E", "#443C5B", "#fcefdf"],
-        ["#788EA5", "#3D4C5C", "#7B5179", "#fff8e7"],
-        ["#553C60", "#FFB0A0", "#FF6749", "#f0f0e8"],
+        ["#FFE8F5", "#8756D1", "#D8709C", "#FAF2E5"],
+        ["#533549", "#F6B042", "#F9ED4E", "#F6F4ED"],
+        ["#8175A3", "#A3759E", "#443C5B", "#FCEFDF"],
+        ["#788EA5", "#3D4C5C", "#7B5179", "#FFF8E7"],
+        ["#553C60", "#FFB0A0", "#FF6749", "#F0F0E8"],
         ["#99C1B2", "#49C293", "#467462", "#F6F1EC"],
         ["#ECBFAF", "#017724", "#0E2733", "#F1F0F0"],
         ["#D2DEB1", "#567BAE", "#60BF3C", "#F3EDED"],
         ["#FDE500", "#58BDBC", "#EFF0DD", "#FBFBF8"],
-        ["#2f2043", "#f76975", "#E7E8CB", "#faf2e5"],
-        ["#5EC227", "#302F35", "#63BDB3", "#f6f4ed"],
-        ["#75974a", "#c83e3c", "#f39140", "#fcefdf"]
+        ["#2F2043", "#F76975", "#E7E8CB", "#FAF2E5"],
+        ["#5EC227", "#302F35", "#63BDB3", "#F6F4ED"],
+        ["#75974A", "#C83E3C", "#F39140", "#FCEFDF"]
     ];
 
     string [25] private flags = [
@@ -155,11 +155,13 @@ contract TinyKingdomsMetadata {
 
 
     function getflagName(uint256 flagIndex) internal view returns (string memory) {       
+        require(flagIndex <= 4096, "Token doesn't exist");
         string memory f1 = flags[flagIndex];
         return string(abi.encodePacked(f1));
     }
 
      function getKingdom (uint256 tokenId, uint256 flagIndex) internal view returns (string memory) {
+        require(tokenId <= 4096, "Token doesn't exist");
         uint256 rand = random(tokenId, "PLACE");
         
         
@@ -219,22 +221,26 @@ contract TinyKingdomsMetadata {
     
 
     function getFlagName(uint256 tokenId) public view returns (string memory){
+        require(tokenId <= 4096, "Token doesn't exist");
         TinyFlag memory flag = randomFlag(tokenId);
         return flag.flagName;
     }
 
     function getKingdomName(uint256 tokenId) public view returns (string memory){
+        require(tokenId <= 4096, "Token doesn't exist");
         return kingdomName(tokenId);
     }
 
-    function getPalette(uint256 tokenId) public view returns (string [3] memory) {
+    function getPalette(uint256 tokenId) public view returns (string [4] memory) {
+        require(tokenId <= 4096, "Token doesn't exist");
         TinyFlag memory flag = randomFlag(tokenId);
         
-        string[3] memory palette;
+        string[4] memory palette;
         
         palette[0] =colors[flag.themeIndex][orders[flag.orderIndex][0]-1];
         palette[1] =colors[flag.themeIndex][orders[flag.orderIndex][1]-1];
         palette[2] =colors[flag.themeIndex][orders[flag.orderIndex][2]-1];
+        palette[3]=colors[flag.themeIndex][3];
         
         return palette;
     }
