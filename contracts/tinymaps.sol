@@ -95,28 +95,32 @@ contract TinyMaps {
         // uint256 startY = 90;
 
         string memory output = "";
+        string[5] memory parts;
 
+        // Draw rectangle for walls
+        parts[0] = '<rect class="cls-1" x="110" y="90" height="';
+        parts[1] = toString(20*uint256(map.size));  // Cast to uint256 to prevent overflow
+        parts[2] = '" width="';
+        parts[3] = toString(20*uint256(map.size));
+        parts[4] = '" style="filter: url(#displacementFilter)" />';
+        output = string(abi.encodePacked(output, parts[0], parts[1], parts[2], parts[3], parts[4]));
+
+        // Lay floor on top
         uint256 counter = 0;
         for(uint256 y = 0; y < map.size; y++) {
             string memory row = "";
-            string[5] memory parts;
 
             for(uint256 x = 0; x < map.size; x++) {
-                
                 // Apply color based on map palette
-                if(getBit(map.layout, counter) == 0) {
-                    parts[0] = '<rect class="cls-1" x="';    
-                } else {
-                    parts[0] = '<rect class="cls-2" x="';    
+                if(getBit(map.layout, counter) == 1) {
+                    parts[0] = '<rect class="cls-2" x="';
+                    parts[1] = toString(110 + (20*x));
+                    parts[2] = '" y="';
+                    parts[3] = toString(90 + (20*y));
+                    parts[4] = '" height="20" width="20" style="filter: url(#displacementFilter)" />';
+                
+                    row = string(abi.encodePacked(row, parts[0], parts[1], parts[2], parts[3], parts[4]));
                 }
-                
-                parts[1] = toString(110 + (20*x));
-                parts[2] = '" y="';
-                parts[3] = toString(90 + (20*y));
-                parts[4] = '" height="20" width="20" style="filter: url(#displacementFilter)" />';
-                
-                row = string(abi.encodePacked(row, parts[0], parts[1], parts[2], parts[3], parts[4]));
-
                 counter++;
             }
 
