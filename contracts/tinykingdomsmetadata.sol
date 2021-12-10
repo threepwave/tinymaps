@@ -227,14 +227,15 @@ contract TinyKingdomsMetadata {
         return kingdomName(tokenId);
     }
 
-    function getPalette(uint256 tokenId) public view returns (string [3] memory) {
+    function getPalette(uint256 tokenId) public view returns (string [4] memory) {
         TinyFlag memory flag = randomFlag(tokenId);
         
-        string[3] memory palette;
+        string[4] memory palette;
         
-        palette[0] =colors[flag.themeIndex][orders[flag.orderIndex][0]-1];
-        palette[1] =colors[flag.themeIndex][orders[flag.orderIndex][1]-1];
-        palette[2] =colors[flag.themeIndex][orders[flag.orderIndex][2]-1];
+        palette[0] = colors[flag.themeIndex][orders[flag.orderIndex][0]-1];
+        palette[1] = colors[flag.themeIndex][orders[flag.orderIndex][1]-1];
+        palette[2] = colors[flag.themeIndex][orders[flag.orderIndex][2]-1];
+        palette[3] = colors[flag.themeIndex][3];
         
         return palette;
     }
